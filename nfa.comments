@@ -1,0 +1,31 @@
+A = (Q, \Sigma, \Delta, q_0, F)
+
+3     // three states 0,1,2 ; Q is a finite set of states
+ab    // Language of NFA    ; \Sigma is a finite set if input states
+1     // Cardinality of F_N ; is the cardinality of the set of accepting states.
+2     // Accepting state    ; F, a subset of Q, is the set of final (or accepting) states.
+0     // Start state        ; q_0 a member of Q, is the start state.
+0 a 0 // at state 0 given a as an input transition to state 0  ; \Delta, the transition function is a function
+0 b 0							       ; that takes a state in Q and an input symbol in \Sigma as arguments
+0 a 1							       ; and returns a subset of Q. Notice that the only difference between an
+1 b 2							       ; NFA and a DFA is in the type of value that \Delta returns: a set of states
+							       ; in the case of an NFA and a single state in the case of a DFA.          
+
+															             
+
+															             
+/**
+	 * <pre>
+	 * The Subset Construction Algorithm
+	 * 
+	 * 1.  -- Create the start state of the DFA by taking the $\varepsilon$-closure of the start state of the NFA.
+	 * 2.  Perform the following for the new DFA state:
+	 *     For each possible input symbol:
+	 *        a. Apply move to the newly-created state and the input symbol; this will return a set of states.
+	 *        b. -- Apply the $\varepsilon$-closure to this set of states, possibly resulting in a new set.
+	 *     This set of NFA states will be a single state in the DFA.
+	 * 3.  Each time we generate a new DFA state, we must apply step 2 to it. The process is complete when applying step 2 
+	 *     does not yield any new states.
+	 * 4.  The finish states of the DFA are those which contain any of the finish states of the NFA.
+	 * </pre>
+	 */															         
