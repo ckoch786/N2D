@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 import nfa.NFAConverter;
+import nfa.Triples;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,8 +50,8 @@ public class TestNFA2DFA {
 				"2 a 1",
 				"2 b 0" };
 		int count = 0;
-		for (String i: dfa.getTransitions()) {
-			assertEquals(t[count], i);
+		for (Triples i: dfa.getTransitions()) {
+			assertEquals(t[count], i.toString());
 		}
 	}
 }
