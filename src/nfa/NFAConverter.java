@@ -15,6 +15,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+import org.junit.Before;
+
 public class NFAConverter {
 	
 	private Queue<Triples> dfaTransitions;
@@ -46,7 +48,7 @@ public class NFAConverter {
 		return Parser.getNumStates();
 	}
 
-	public String[] getLanguage() {
+	public String getLanguage() {
 		return Parser.getLanguage();
 	}
 
@@ -80,21 +82,29 @@ public class NFAConverter {
 	 */					
 	public void generateDFA() {
 		dfaStatesAddInitialState();
-		for (String w: getLanguage()) {
-			for (Set<String> s: dfaStates) {
-				applyMove(w, s);
+		int i = 0;
+		for (char w: getLanguage().toCharArray()) {
+			while (i < dfaStates.size()) {
+				applyMove(Character.toString(w), (Set<String>) dfaStates.toArray() [i]);
+				i++;
 			}
+	
+//			for (Set<String> s: dfaStates) {
+//				
+//			}
 		}
 	}
 
-	private void applyMove(String w, Set<String> s) {
+	private void applyMove(String w, Set<String> nfaStates) {
 		dfaTransition = new LinkedHashSet<String>();
-		for (String t: s) {
-			
-			dfaTransition.addAll(Parser.getNFATransitions(t, w));
+		for (String currentState: nfaStates) {
+			Set<String> states = Parser.getNFATransitions(currentState, w);
+			if (states != null) {
+				dfaTransition.addAll(states);
+			}
 		}
 		// TODO output this to file when we complete generation
-		dfaTransitions.add(new Triples(s, w, dfaTransition));
+		dfaTransitions.add(new Triples(nfaStates, w, dfaTransition));
 		dfaStates.add((LinkedHashSet<String>) dfaTransition);
 	}
 
@@ -105,21 +115,19 @@ public class NFAConverter {
 		dfaStates.add(foo);
 	}
 
-/*	for (String s : dfaStates) {
-		for (String w : getLanguage()) {
-			applyMove(currentState, w);
-			currentState = "";
+	public static void main (String[] args) {
+		NFAConverter dfa;
+		if (args.length == 0) {
+			System.out.println("Need to enter name of file");
+		}
+		dfa = new NFAConverter(args[0]);
+		dfa.generateDFA();
+		
+		int count = 0;
+		for (Triples i: dfa.getTransitions()) {
+			//assertEquals(t[count], i.toString());
+			System.out.println(i.toString());
 		}
 	}
-*//*	private void applyMove(String currentState, String w) {
-		
-		//dfaEnqueueTransition();
-	}*/
+	
 }
-/*int i = 0;
-
-for (String s : Parser.getNFATransitions(currentState, w)) {
-	dfaTransitions.add(s); // Populate set of states 
-	//dfaStates.put(dfaTransitions, Integer.toString(i)); // Add to states 
-}
-*/

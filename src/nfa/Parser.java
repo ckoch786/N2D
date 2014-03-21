@@ -1,13 +1,16 @@
 package nfa;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class Parser {
 	
 	private static int numStates;
-	private static String[] language;
+	private static String language;
 	private static int numAcceptingStates;
 	private static int statesRead = 0;
 	private static List<String> acceptingStates;
@@ -35,7 +38,7 @@ public class Parser {
 		if (lineNum == NFA.STATES.lineNum()) {
 			numStates = Integer.parseInt(t);
 		} else if (lineNum == NFA.LANGUAGE.lineNum()) {
-			language = t.split(" ");
+			language = t;
 		} else if (lineNum == NFA.CARDINALITY.lineNum()) {
 			numAcceptingStates = Integer.parseInt(t);
 		} else if (lineNum > NFA.CARDINALITY.lineNum() && 
@@ -53,7 +56,7 @@ public class Parser {
 			String c = transition[0];
 			String w = transition[1];
 			String n = transition[2];
-			transitionFunctions.put(new Tuple(c,w), n);
+			transitionFunctions.put(Collections.unmodifiableList(Arrays.asList(c,w)), n);
 		}
 				
 	}
@@ -70,7 +73,7 @@ public class Parser {
 		return numStates;
 	}
 
-	public static String[] getLanguage() {
+	public static String getLanguage() {
 		return language;
 	}
 
@@ -82,8 +85,8 @@ public class Parser {
 		return startState;
 	}
 
-	public static Stack<String> getNFATransitions(String currentState, String w) {
-		return transitionFunctions.get(new Tuple(currentState, w));
+	public static Set<String> getNFATransitions(String currentState, String w) {
+		return transitionFunctions.get(Arrays.asList(currentState, w));
 	}
 
 	
